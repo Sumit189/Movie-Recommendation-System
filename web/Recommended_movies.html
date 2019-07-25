@@ -1,0 +1,181 @@
+<html>
+    <head>
+        <title>Recommender System</title>
+        <link rel="icon" type="image/png" href="favicon.png"/>
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <script type="text/javascript" src="/eel.js"></script>
+        <script>
+        var interval;
+        function rc_movies(){
+            document.getElementById("errormsg").innerHTML="Click on movie names to Search";
+            document.getElementById("popup_container").style.visibility="visible";
+            interval=setInterval("closepopup()", 3000);
+            for(i=0;i<5;i+=1){
+                document.getElementById("f"+(i+1)).innerHTML=localStorage.getItem("rc"+(i+1));
+            }
+        }
+
+        //PopUp close
+        function closepopup(){
+        clearInterval(interval);
+        $("#popup_container").fadeOut("slow");
+        }
+        function goback(){
+            localStorage.clear();
+            window.open("main.html","_self");
+        }
+
+        function google_it(n){
+            window.open("https://www.imdb.com/find?ref_=nv_sr_fn&q="+localStorage.getItem("rc"+(n))+"+&s=all");
+        }
+
+        </script>
+    </head>
+    <body onload="rc_movies()" background="crown.jpg">
+    <div class="bg-image"></div>
+    <div id="popup_container">
+        <div id="popup">
+        <span class="close-button" onclick="closepopup()">&times;</span>
+        <h2 id="errormsg"></h2>
+        </div>
+        </div>
+        <center><h1 id=title>Recommended Movies</h1></center>
+        <div id=topslab>
+        <div class="grid-container">
+                <div class="grid-item" style="color:#FF0000;font-size: 30px; font-weight: bold">Movie Names</div>
+                <div class="grid-item" id="f1" style="font-size: 20px; font-weight: bold" onclick="google_it(1)">1</div>
+                <div class="grid-item" id="f2" style="font-size: 20px; font-weight: bold" onclick="google_it(2)">2</div>
+                <div class="grid-item" id="f3" style="font-size: 20px; font-weight: bold" onclick="google_it(3)">3</div>
+                <div class="grid-item" id="f4" style="font-size: 20px; font-weight: bold" onclick="google_it(4)">4</div>
+                <div class="grid-item" id="f5" style="font-size: 20px; font-weight: bold" onclick="google_it(5)">5</div>
+        </div>
+        </div>
+        <center><Button class="button" onclick="goback()">Go Back</Button></center>
+   
+    </body>
+
+
+    <style>
+        html,body{
+        background: url(crown.jpg) no-repeat center center fixed; 
+        background-size: 100% 100%;
+        font-family: 'Open Sans', sans-serif;
+        }
+    #title{
+        color:#fff;
+        padding-top: 2%;
+    }
+    .grid-container {
+        display: grid;
+        grid-template-columns: auto;
+        background-color: rgb(250, 250, 250);
+        padding: 1px;
+    }
+    .grid-item {
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        font-size: 30px;
+        text-align: center; 
+    }
+    #topslab{
+    font-style: normal;
+    font-weight: 100;
+    border-radius:5%;
+    display: block;
+    background-color: #fff;
+    width: 30vw;
+    height:500px;
+    border:2px solid #000;
+    box-shadow:10px 10px 5px #000;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-left: 35%;
+    margin-top:3%;
+}
+
+.Button {
+        outline:none;
+        border-radius:25px;
+        background-color: #E50914;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 2%;
+        display: inline-block;
+        font-size: 16px;
+    }
+    .Button:hover{
+        background-color: #000;
+        color:#E50914;
+    }
+
+    #f1:hover,#f2:hover,#f3:hover,#f4:hover,#f5:hover{
+        color:#FF0000;
+        animation: blink 1s linear infinite;
+    }
+    @keyframes blink{
+        0%{font-size: 15px;}
+        50%{font-size: 18px;}
+        100%{font-size: 20px;}
+    }
+
+
+    #popup_container{
+visibility: hidden;
+height:100vh;
+width:100vw;
+background: rgb(0,0,0,.5);
+background-blend-mode: darken;
+z-index: 1;
+position: absolute;
+left:0;
+right:0;
+top:0;
+bottom:0;
+margin: auto;
+}
+h2{
+color:#D50000;
+margin-top: 55px;
+}
+#popup{
+text-align: center;
+border-radius: 20px;
+height:150px;
+width:600px;
+background:#fff;
+z-index: 1;
+position: absolute;
+left:0;
+right: 0;
+top:0;
+bottom: 0;
+margin: auto;
+
+}
+
+.close-button {
+        float: right;
+        margin-right: 10px;
+        margin-top: 10px;
+        width: 1.5rem;
+        line-height: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 0.25rem;
+        background-color: lightgray;
+    }
+.close-button:hover {
+background-color: darkgray;
+}
+
+    </style>
+
+<html>

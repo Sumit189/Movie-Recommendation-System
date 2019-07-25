@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Select Movies</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="Pragma" content="no-cache" />
+<link rel="icon" type="image/png" href="favicon.png"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<style>
+* {
+  box-sizing: border-box;
+}
+html,body{
+        background: url(super.jpg) no-repeat center center fixed; 
+        background-size: 100% 100%;
+        font-family: 'Open Sans', sans-serif;
+        }
+.Button {
+        outline: none;
+        background-color:#E50914;
+        border-radius: 25px;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 3%;
+        display: inline-block;
+        font-size: 16px;
+    }
+    .Button:hover{
+        background-color: #000;
+        color:#E50914;
+    }
+#myInput {
+outline: none;
+  border-radius: 25px;
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 5px;
+}
+
+#myUL { 
+  cursor: pointer;
+  outline: none;
+  list-style-type: none;
+  padding: 0;
+  margin: 3;
+}
+
+#myUL li a {
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+  border-radius: 25px;
+  border: 1px solid #ddd;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+  display: block;
+  }
+
+#myUL li a:hover:not(.header) {
+  background-color: #E50914;
+  color:#fff;
+}
+#title{
+    color:#fff;
+    padding-top: 2%;
+}
+
+#popup_container{
+visibility: hidden;
+height:100vh;
+width:100vw;
+background: rgb(0,0,0,0.7);
+z-index: 1;
+position: absolute;
+left:0;
+right:0;
+top:0;
+bottom:0;
+margin: auto;
+}
+#popup{
+text-align: center;
+border-radius: 20px;
+height:250px;
+width:100vw;
+z-index: 1;
+position: absolute;
+left:0;
+right: 0;
+top:0;
+bottom: 0;
+margin: auto;
+
+}
+
+.load{
+    font-weight: bold;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: 80px;
+    margin-left: -40px;
+    font-size: 20px;
+    color:#fff;
+}
+
+.loading {
+position : absolute ;
+top : 0 ;
+bottom : 0 ;
+left: 0 ;
+right : 0 ;
+width : 50% ;
+height : 30% ;
+margin : auto ;
+border : 8px solid #334;
+border-top : 8px solid #fff;
+border-radius : 50% ;
+width : 60px ;
+height : 60px ;
+animation : spin 2s linear infinite ;
+}
+@keyframes spin {
+0% { transform : rotate(0deg) ; }
+100% { transform : rotate(360deg) ; }
+}
+
+::-webkit-scrollbar {
+display: none;
+}
+</style>
+</head>
+<body onload="ds()" background="search-bg.jpg">
+<center><h2 id=title>Movie List</h2></center>
+  <div id="popup_container">
+  <div id="popup">
+  <h2 id="msgmsg"></h2>
+  </div>
+  </div>
+  
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for movies.." title="Type in a name">
+<center><Button onclick="send_movie_name()" class="Button">Submit Movie</Button></center>
+<div id='foo'>     
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Selected Movie</h4>
+        </div>
+        <div class="modal-body">
+          <p id="msg">Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+
+
+</input>
+<script type="text/javascript" src="/eel.js"></script>
+<script>
+function send_movie_name(){
+check_movies=new Array('first_movie','second_movie','third_movie','fourth_movie','fifth_movie');
+selected_row=parseInt(localStorage.getItem("which_sel"));
+movie=localStorage.getItem(check_movies[selected_row-1]);
+if(movie==null){
+  document.getElementById("msg").innerText="Please Select a movie";
+  $("#myModal").modal('show');
+}
+else{
+window.close();
+}
+}
+
+function alrt(a){
+document.getElementById("msg").innerText=a;
+$("#myModal").modal('show');
+io(a);   
+}
+
+function io(a){
+    a=a.toString();
+    selected_row=parseInt(localStorage.getItem("which_sel"));
+    if(selected_row==1){
+        localStorage.setItem("first_movie",a);
+    }
+    if(selected_row==2){
+        localStorage.setItem("second_movie",a);
+    }
+    if(selected_row==3){
+        localStorage.setItem("third_movie",a);
+    }
+    if(selected_row==4){
+        localStorage.setItem("fourth_movie",a);
+    }
+    if(selected_row==5){
+        localStorage.setItem("fifth_movie",a);
+    }
+}
+var array;
+    async function ds(){
+            document.getElementById("msgmsg").innerHTML="<div class =\"loading\"></div><p class=\"load\">Loading</p>";
+	          document.getElementById("popup_container").style.visibility="visible";
+            value = await eel.data_options()();
+            value=value.trim();
+            array = value.split("'");
+            makeUL();
+        }
+
+function makeUL(){
+    var a = '<ul id=\"myUL\">',
+        b = '</ul>',
+        m = [];
+    for (i = 0; i < array.length; i += 1){
+        if(array[i]!=' ' && array[i]!='[' && array[i]!=']' && array[i]!=', ' && array[i]!=localStorage.getItem("first_movie") 
+        && array[i]!=localStorage.getItem("second_movie")  && array[i]!=localStorage.getItem("third_movie") 
+        && array[i]!=localStorage.getItem("fourth_movie")  && array[i]!=localStorage.getItem("fifth_movie")){
+        m[i] = '<li onclick=alrt(this.id) id=\"'+array[i]+'\"><a>' + array[i] + '</a></li>';
+        }
+    }
+    document.getElementById('foo').innerHTML = a + m + b;
+    document.getElementById("popup_container").style.visibility="hidden";
+}
+
+function myFunction() {
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName("li");
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+</script>
+</body>
+</html>

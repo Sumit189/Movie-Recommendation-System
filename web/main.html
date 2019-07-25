@@ -1,0 +1,254 @@
+<html>
+    <head>
+        <title>Recommender System</title>
+        <link rel="icon" type="image/png" href="favicon.png"/>
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script type="text/javascript" src="/eel.js"></script>
+        <script>
+        sel_movie=0;
+        function timer(){
+            localStorage.clear();
+            setInterval("Movies_update()", 1);
+        }    
+        function selmovies(movie_num) {
+        sel_movie=movie_num;
+        localStorage.setItem("which_sel",movie_num);
+        window.open("filter_search.html", "myWindow", "width=480,height=960");
+        }
+
+        function Movies_update() {
+            arr_of_mv=["first_movie","second_movie","third_movie","fourth_movie","fifth_movie"];
+            if(sel_movie>0){
+            document.getElementById("f"+sel_movie+"m").innerHTML = localStorage.getItem(arr_of_mv[sel_movie-1]);
+        }
+        } 
+
+        function ppython(){
+        to_continue=2;
+        for(i=1;i<=5;i++){
+            check_movies=new Array('first_movie','second_movie','third_movie','fourth_movie','fifth_movie');
+            if(localStorage.getItem(check_movies[i-1])==null){
+                alert("Please fill Movie Names correctly");
+                to_continue=0;
+                break;
+            }
+            else{
+                to_continue=1;
+            }
+        }
+        if(to_continue==1){
+         for(i=1;i<=5;i++){
+             if(document.getElementById("m"+i).value=='' || parseInt(document.getElementById("m"+i).value)>10){
+                 alert("Please fill Ratings correctly");
+                 to_continue=0;
+                 break;
+             }
+             else{
+                 to_continue=2;
+             }
+         }
+        }
+         if(to_continue==2){
+          var user_movies=new Array(localStorage.getItem("first_movie"),localStorage.getItem("second_movie"),
+            localStorage.getItem("third_movie"),localStorage.getItem("fourth_movie"),
+            localStorage.getItem("fifth_movie"));
+          var user_ratings=new Array(document.getElementById("m1").value,document.getElementById("m2").value,
+          document.getElementById("m3").value,document.getElementById("m4").value,document.getElementById("m5").value);
+          recommended_movies(user_movies,user_ratings);
+        }
+        }
+
+        async function recommended_movies(user_movies,user_ratings){
+            document.getElementById("errormsg").innerHTML="<p id=load>Loading</p>";
+            setInterval("load_msg()", 1000);
+            document.getElementById("nn").style.visibility="visible";
+	        document.getElementById("popup_container").style.visibility="visible";
+            value = await eel.ml(user_movies,user_ratings)();
+            localStorage.setItem("rc1",value[0]);
+            localStorage.setItem("rc2",value[1]);
+            localStorage.setItem("rc3",value[2]);
+            localStorage.setItem("rc4",value[3]);
+            localStorage.setItem("rc5",value[4]);
+            document.getElementById("popup_container").style.visibility="hidden";
+            window.open("Recommended_movies.html","_self");
+        }
+		var msgs=new Array('Loading Algorithm','Running Algorithm.');
+        var vibs=new Array('hidden','visible');
+        var msg_count=parseInt(0);
+        var j=0;
+        function load_msg(){
+            if(msg_count>1){
+                if(j==2){
+                    j=0;
+                }
+                document.getElementById("load").style.visibility=vibs[j];
+                j+=1;
+                msgs[msg_count]=msgs[msg_count-1]+".";
+                document.getElementById("load").innerText=msgs[msg_count];
+            }
+            else{
+            document.getElementById("load").innerText=msgs[msg_count];
+            }
+            msg_count+=1;
+        }
+    </script>
+    </head id="focus">
+    <body onload="timer()" >
+        <center><h1 id=title>Recommender System</h1></center>
+        <div id="popup_container">
+        <center><iframe src="NN.html" height="600px%" width="960px" style="border-radius: 20px" id="nn"></iframe></center>
+        <h2 id="errormsg"></h2>
+        </div>
+        </div>
+        <div id=topslab>
+        <div class="grid-container">
+                <div class="grid-item" style="font-size:30px ; font-weight: bold">Movie Names<br><span style="font-size: 15px; color: #FF0000">(You have watched)</span></div>
+                <div class="grid-item" style="font-size:30px; font-weight: bold">Ratings<br><span style="font-size:20px;color:yellow;">&starf;</span><span style="font-size:20px;color:yellow;">&starf;</span><span style="font-size:20px;color:yellow;">&starf;</span><span style="font-size:20px;color:yellow;">&starf;</span><span style="font-size:20px;color:yellow;">&starf;</span></div>
+                <div class="grid-item" id="f1m" onclick="selmovies(1)"  >Select Movie</div>
+                <div class="grid-item"><input type="text" name="rating1" maxlength="4" size="4" id="m1"></div>
+                <div class="grid-item" id="f2m" onclick="selmovies(2)">Select Movie</div>  
+                <div class="grid-item"><input type="text" name="rating2" maxlength="4" size="4" id="m2"></div>
+                <div class="grid-item" id="f3m" onclick="selmovies(3)">Select Movie</div>
+                <div class="grid-item"><input type="text" name="rating3" maxlength="4" size="4" id="m3"></div>  
+                <div class="grid-item" id="f4m" onclick="selmovies(4)">Select Movie</div>
+                <div class="grid-item"><input type="text" name="rating4" maxlength="4" size="4" id="m4"></div>
+                <div class="grid-item" id="f5m" onclick="selmovies(5)">Select Movie</div>
+                <div class="grid-item"><input type="text" name="rating5" maxlength="4" size="4" id="m5"></div>
+        </div>
+        <center><Button class="button" onclick="ppython()">Suggest me movies</Button></center>
+        </div>
+   
+    </body>
+
+
+    <style>
+        html,body{
+        background: rgba(0, 0, 0, .65) url(background.jpg) no-repeat center center fixed; 
+        background-blend-mode: darken;
+        background-size: 100% 100%;
+        font-family: 'Open Sans', sans-serif;
+    }
+    #m1,#m2,#m3,#m4,#m5 {
+    cursor: pointer;
+    outline:none;
+    text-align: center;
+    border-radius: 25px;
+    border: 2px solid #334;
+    padding: 15px; 
+    width: 70px;
+    height: 5px;    
+}
+
+#m1:hover,#m2:hover,#m3:hover,#m4:hover,#m5:hover {
+border:2px solid #FFDF00;
+}
+    .Button {
+        cursor: pointer;
+        outline:none;
+        border-radius:25px;
+        background-color: #E50914;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 5%;
+        display: inline-block;
+        font-size: 16px;
+        box-shadow: 0 15px 10px -8px black;
+    }
+    .Button:hover{
+        background-color: #000;
+        color:#E50914;
+    }
+    #title{
+        color:#fff;
+        padding-top: 2%;    
+        letter-spacing: .1em;
+        text-shadow: 
+      -1px -1px 1px #000, 
+      2px 2px 1px #000;
+    }
+    .grid-container {
+        display: grid;
+        grid-template-columns: auto auto;
+        background-color: rgb(250, 250, 250);
+        padding: 1px;
+    }
+    .grid-item {
+        cursor: pointer;
+        font-weight: bold;
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 0.2px solid rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        font-size: 15px;
+        text-align: center; 
+    }
+    #f1m:hover,#f2m:hover,#f3m:hover,#f4m:hover,#f5m:hover{
+        color:#FF0000;
+        animation: blink 1s linear infinite;
+    }
+      @keyframes blink{
+        0%{font-size: 15px;}
+        50%{font-size: 18px;}
+        100%{font-size: 20px;}
+    }
+    #topslab{
+    font-style: normal;
+    font-weight: 100;
+    border-radius:5%;
+    display: block;
+    background-color: #fff;
+    width: 30vw;
+    height:580px;
+    border:2px solid #000;
+    box-shadow:10px 10px 5px #000;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-left: 35%;
+    margin-top:3%;
+}
+
+
+#popup_container{
+visibility: hidden;
+height:100vh;
+width:100vw;
+background: rgb(0,0,0,0.7);
+z-index: 1;
+position: absolute;
+left:0;
+right:0;
+top:0;
+bottom:0;
+margin: auto;
+}
+#nn{
+    visibility: hidden;
+    position: absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    margin: auto;
+}
+#load{
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+    position: fixed;
+    top: 50%;
+    margin-top: 17%;
+    font-size: 20px;
+    color:#fff;
+    z-index: 2;
+}
+
+
+
+    </style>
+
+<html>
