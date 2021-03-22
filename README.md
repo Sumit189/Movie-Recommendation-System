@@ -1,6 +1,6 @@
 # Movie-Recommendation-System
 
-<b>This project suggests 5 movies to eatch based on user inputs of Movie name and Ratings using Collaborative Filtering.</b>
+<b>This project suggests 5 movies based on user inputs of Movie name and Ratings using Collaborative Filtering.</b>
 
 
 Datasets are available on link given below.
